@@ -14,10 +14,10 @@
 - Use the `cd` command to move into the folder where your bot files are located. Example: `cd Desktop/MyDiscordBot`
 
 **Step 4 - Install discord.py:**
-- pip install -U discord.py
+- `pip install -U discord.py`
 
 **Step 5 - Install aiomysql:**
-- pip install aiomysql
+- `pip install aiomysql`
 
 **Step 6 - Install pytz:**
-- pip install pytz
+- `pip install pytz`
