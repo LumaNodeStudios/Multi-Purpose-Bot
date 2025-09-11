@@ -1,6 +1,6 @@
 # NOTE
 - This bot is being released as BETA meaning there is a chance there is issues or missing features ETC. (USE AT YOUR OWN WILL UNTIL BOT IS DECLARED FINISHED)
-- This bot MUST run locally. If you own a VPS recommended to run on there not personal PC
+- This bot can be run on your personal PC for testing but it is **recommended** to run it on a VPS (Virtual Private Server) or dedicated server for 24/7 uptime.
 
 # Installation
 
