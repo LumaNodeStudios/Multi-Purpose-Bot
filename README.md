@@ -1,13 +1,23 @@
-# Requirements READ MEEEEEEEEEE
+# NOTE
+- This bot is being released as BETA meaning there is a chance there is issues or missing features ETC. (USE AT YOUR OWN WILL UNTIL BOT IS DECLARED FINISHED)
 
-**Python:**
-- https://www.python.org/downloads/
+# Installation
 
-**Discord Py:**
+**Step 1 – Install Python:**
+- Download and install Python from the official website: https://www.python.org/downloads/
+- When installing, make sure to check the box **"Add Python to PATH"**.
+
+**Step 2 – Open a Terminal/Command Prompt:**
+- On **Windows**: Press `Win + R`, type `cmd`, and hit Enter.
+
+**Step 3 – Go to Your Bot's Folder:**
+- Use the `cd` command to move into the folder where your bot files are located. Example: `cd Desktop/MyDiscordBot`
+
+**Step 4 - Install discord.py:**
 - pip install -U discord.py
 
-**Aiomysql:**
+**Step 5 - Install aiomysql:**
 - pip install aiomysql
 
-**Pytz:**
+**Step 6 - Install pytz:**
 - pip install pytz
