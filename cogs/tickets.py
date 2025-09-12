@@ -10,6 +10,9 @@ import config
 
 CONFIG_FILE = "ticket_config.json"
 
+def slugify(name: str) -> str:
+    return name.lower().replace(" ", "-")
+
 def load_ticket_config():
     if not os.path.exists(CONFIG_FILE):
         with open(CONFIG_FILE, "w") as f:
@@ -110,7 +113,7 @@ async def create_ticket(interaction: discord.Interaction, ticket_type: str, sett
             overwrites[role] = discord.PermissionOverwrite(view_channel=True, send_messages=True)
 
     channel = await guild.create_text_channel(
-        name=f"{ticket_type}-{user.id}",
+        name=f"{slugify(ticket_type)}-{user.id}",
         overwrites=overwrites,
         category=category,
         reason=f"{ticket_type.capitalize()} ticket opened by {user}"
@@ -130,7 +133,7 @@ async def create_ticket(interaction: discord.Interaction, ticket_type: str, sett
     view.add_item(CloseTicketView().children[0])
     view.add_item(ClaimTicketView().children[0])
 
-    await channel.send(content=f"{user.mention}", embed=embed, view=view)
+    await channel.send(content="@here", embed=embed, view=view)
 
     await interaction.response.send_message(
         f"Your **{ticket_type}** ticket has been created: {channel.mention}",
@@ -192,7 +195,7 @@ class ClaimTicketView(discord.ui.View):
         data = load_ticket_config()
         ticket_type = None
         for ttype, settings in data.items():
-            if channel.name.startswith(ttype):
+            if channel.name.startswith(slugify(ttype)):
                 ticket_type = ttype
                 break
 
@@ -241,7 +244,7 @@ class CloseTicketView(discord.ui.View):
         data = load_ticket_config()
         ticket_type = None
         for ttype, settings in data.items():
-            if channel.name.startswith(ttype):
+            if channel.name.startswith(slugify(ttype)):
                 ticket_type = ttype
                 break
 

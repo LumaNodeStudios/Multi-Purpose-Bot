@@ -14,6 +14,7 @@ WELCOME_CHANNEL_ID = 1234567890123456789 # Example
 # Verify Feature
 # Role to give when verified
 VERIFIED_ROLE_ID = 1234567890123456789 # Example
+VERIFY_PUBLIC_LOG_CHANNEL = 1234567890123456789 # Example
 VERIFY_LOG_CHANNEL_ID = 1234567890123456789 # Example
 
 # Blacklist of user IDs who cannot verify

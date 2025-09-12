@@ -77,10 +77,18 @@ class StaffDecisionView(View):
 
         await interaction.response.edit_message(embed=embed, view=None)
 
-        try:
-            await self.user.send("You have been approved and verified!")
-        except:
-            pass
+        public_embed = discord.Embed(
+            title="✅ Verification Approved",
+            description=f"{self.user.mention} has been **approved and verified!**",
+            color=discord.Color.green()
+        )
+        public_embed.add_field(name="Character Name", value=self.char_name, inline=False)
+        public_embed.add_field(name="Steam Name", value=self.steam_name, inline=False)
+
+        public_log = interaction.client.get_channel(config.VERIFY_PUBLIC_LOG_CHANNEL)
+        if public_log:
+            await public_log.send(embed=public_embed)
+
         self.stop()
 
     @discord.ui.button(label="Deny", style=discord.ButtonStyle.danger)
@@ -96,10 +104,20 @@ class StaffDecisionView(View):
 
         await interaction.response.edit_message(embed=embed, view=None)
 
-        try:
-            await self.user.send("Your verification was denied. You may retry after 10 minutes.")
-        except:
-            pass
+        public_embed = discord.Embed(
+            title="❌ Verification Denied",
+            description=f"{self.user.mention}, your verification request was denied.",
+            color=discord.Color.red()
+        )
+        public_embed.add_field(name="Character Name", value=self.char_name, inline=False)
+        public_embed.add_field(name="Steam Name", value=self.steam_name, inline=False)
+        public_embed.add_field(name="Backstory", value=self.backstory, inline=False)
+        public_embed.set_footer(text="You may retry after 10 minutes.")
+
+        public_log = interaction.client.get_channel(config.VERIFY_PUBLIC_LOG_CHANNEL)
+        if public_log:
+            await public_log.send(embed=public_embed)
+
         self.stop()
 
 class VerifyView(View):
