@@ -16,6 +16,8 @@ WELCOME_CHANNEL_ID = 1234567890123456789 # Example
 VERIFIED_ROLE_ID = 1234567890123456789 # Example
 VERIFY_PUBLIC_LOG_CHANNEL = 1234567890123456789 # Example
 VERIFY_LOG_CHANNEL_ID = 1234567890123456789 # Example
+APPROVED_IMAGE_URL = "https://example.com/approved.png"
+DENIED_IMAGE_URL = "https://example.com/denied.png"
 
 # Blacklist of user IDs who cannot verify
 BLACKLIST = [

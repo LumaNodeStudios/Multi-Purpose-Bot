@@ -85,6 +85,8 @@ class StaffDecisionView(View):
         public_embed.add_field(name="Character Name", value=self.char_name, inline=False)
         public_embed.add_field(name="Steam Name", value=self.steam_name, inline=False)
 
+        public_embed.set_image(url=config.APPROVED_IMAGE_URL)
+
         public_log = interaction.client.get_channel(config.VERIFY_PUBLIC_LOG_CHANNEL)
         if public_log:
             await public_log.send(embed=public_embed)
@@ -113,6 +115,8 @@ class StaffDecisionView(View):
         public_embed.add_field(name="Steam Name", value=self.steam_name, inline=False)
         public_embed.add_field(name="Backstory", value=self.backstory, inline=False)
         public_embed.set_footer(text="You may retry after 10 minutes.")
+
+        public_embed.set_image(url=config.DENIED_IMAGE_URL)
 
         public_log = interaction.client.get_channel(config.VERIFY_PUBLIC_LOG_CHANNEL)
         if public_log:
