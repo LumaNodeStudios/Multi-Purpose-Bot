@@ -8,8 +8,23 @@ import asyncio
 cooldowns = {}
 
 class VerifyModal(Modal, title="Verification"):
-    char_name = TextInput(label="Character Name", placeholder="Enter your character name", required=True)
-    steam_name = TextInput(label="Steam Name", placeholder="Enter your Steam name", required=True)
+    char_name = TextInput(
+        label="Character Name",
+        placeholder="Enter your character name",
+        required=True
+    )
+    steam_name = TextInput(
+        label="Steam Name",
+        placeholder="Enter your Steam name",
+        required=True
+    )
+    backstory = TextInput(
+        label="Character Backstory",
+        placeholder="Write a short backstory for your character...",
+        style=discord.TextStyle.paragraph,
+        required=True,
+        max_length=1000
+    )
 
     def __init__(self, user: discord.Member):
         super().__init__()
@@ -24,19 +39,21 @@ class VerifyModal(Modal, title="Verification"):
         embed.add_field(name="User", value=f"{self.user.mention} ({self.user.id})", inline=False)
         embed.add_field(name="Character Name", value=self.char_name.value, inline=False)
         embed.add_field(name="Steam Name", value=self.steam_name.value, inline=False)
+        embed.add_field(name="Backstory", value=self.backstory.value, inline=False)
 
         staff_channel = interaction.client.get_channel(config.STAFF_LOG_CHANNEL_ID)
-        view = StaffDecisionView(self.user, self.char_name.value, self.steam_name.value)
+        view = StaffDecisionView(self.user, self.char_name.value, self.steam_name.value, self.backstory.value)
         await staff_channel.send(embed=embed, view=view)
 
         await interaction.response.send_message("Your verification request has been sent to staff.", ephemeral=True)
 
 class StaffDecisionView(View):
-    def __init__(self, user: discord.Member, char_name: str, steam_name: str):
+    def __init__(self, user: discord.Member, char_name: str, steam_name: str, backstory: str):
         super().__init__(timeout=None)
         self.user = user
         self.char_name = char_name
         self.steam_name = steam_name
+        self.backstory = backstory
 
     @discord.ui.button(label="Approve", style=discord.ButtonStyle.success)
     async def approve(self, interaction: discord.Interaction, button: discord.ui.Button):
@@ -56,6 +73,7 @@ class StaffDecisionView(View):
         embed.add_field(name="User", value=f"{self.user.mention} ({self.user.id})", inline=False)
         embed.add_field(name="Character Name", value=self.char_name, inline=False)
         embed.add_field(name="Steam Name", value=self.steam_name, inline=False)
+        embed.add_field(name="Backstory", value=self.backstory, inline=False)
 
         await interaction.response.edit_message(embed=embed, view=None)
 
@@ -73,6 +91,7 @@ class StaffDecisionView(View):
         embed.add_field(name="User", value=f"{self.user.mention} ({self.user.id})", inline=False)
         embed.add_field(name="Character Name", value=self.char_name, inline=False)
         embed.add_field(name="Steam Name", value=self.steam_name, inline=False)
+        embed.add_field(name="Backstory", value=self.backstory, inline=False)
         embed.set_footer(text="User may retry in 10 minutes.")
 
         await interaction.response.edit_message(embed=embed, view=None)
@@ -123,7 +142,7 @@ class Verify(commands.Cog):
         embed = discord.Embed(
             title="Verification",
             description="Click the button below to start the verification process.",
-            color=discord.Color.green()
+            color=config.EMBED_COLOR
         )
         view = VerifyView()
         await interaction.channel.send(embed=embed, view=view)
