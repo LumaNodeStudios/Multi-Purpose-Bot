@@ -33,6 +33,7 @@ class Welcome(commands.Cog):
             inline=False
         )
         embed.set_footer(text=f"Member #{len(member.guild.members)}")
+        embed.set_image(url=config.WELCOME_IMAGE_URL)
 
         await channel.send(embed=embed)
 

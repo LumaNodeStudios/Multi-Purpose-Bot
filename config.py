@@ -10,6 +10,7 @@ EMBED_COLOR = int("58bed5", 16) # Change inside "", dont touch 16
 # Welcome
 # Preferred welcome channel
 WELCOME_CHANNEL_ID = 1234567890123456789 # Example
+WELCOME_IMAGE_URL = "https://example.com/approved.png"
 
 # Verify Feature
 # Role to give when verified
