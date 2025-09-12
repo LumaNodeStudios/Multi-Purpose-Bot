@@ -23,7 +23,7 @@ class VerifyModal(Modal, title="Verification"):
         placeholder="Write a short backstory for your character...",
         style=discord.TextStyle.paragraph,
         required=True,
-        max_length=1000
+        max_length=3000
     )
 
     def __init__(self, user: discord.Member):
@@ -43,7 +43,7 @@ class VerifyModal(Modal, title="Verification"):
 
         staff_channel = interaction.client.get_channel(config.VERIFY_LOG_CHANNEL_ID)
         view = StaffDecisionView(self.user, self.char_name.value, self.steam_name.value, self.backstory.value)
-        await staff_channel.send(embed=embed, view=view)
+        await staff_channel.send(content="@here", embed=embed, view=view)
 
         await interaction.response.send_message("Your verification request has been sent to staff.", ephemeral=True)
 

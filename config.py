@@ -14,7 +14,7 @@ WELCOME_CHANNEL_ID = 1234567890123456789 # Example
 # Verify Feature
 # Role to give when verified
 VERIFIED_ROLE_ID = 1234567890123456789 # Example
-VERIFY_LOG_CHANNEL_ID = 1410848266157031487 # Example
+VERIFY_LOG_CHANNEL_ID = 1234567890123456789 # Example
 
 # Blacklist of user IDs who cannot verify
 BLACKLIST = [
@@ -34,7 +34,7 @@ POLLONLYADMIN = True
 
 # Tickets
 # All done within discord (/help)
-TICKET_LOG_CHANNEL_ID = 1410848371903823934
+TICKET_LOG_CHANNEL_ID = 1234567890123456789
 
 # Feature Toggles
 FEATURES = {
