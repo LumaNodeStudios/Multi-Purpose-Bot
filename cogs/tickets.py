@@ -234,7 +234,29 @@ class CloseTicketView(discord.ui.View):
 
     @discord.ui.button(label="Close Ticket", style=discord.ButtonStyle.red, custom_id="close_ticket")
     async def close_ticket(self, interaction: discord.Interaction, button: discord.ui.Button):
-        modal = CloseTicketReasonModal(interaction.channel)
+        channel = interaction.channel
+        guild = interaction.guild
+        user = interaction.user
+
+        data = load_ticket_config()
+        ticket_type = None
+        for ttype, settings in data.items():
+            if channel.name.startswith(ttype):
+                ticket_type = ttype
+                break
+
+        if not ticket_type:
+            return await interaction.response.send_message("Could not identify ticket type.", ephemeral=True)
+
+        settings = data[ticket_type]
+        close_permission = settings.get("close_permission", "staff")
+
+        if close_permission == "staff":
+            staff_roles = [guild.get_role(r) for r in settings["staff_roles"]]
+            if not any(r in user.roles for r in staff_roles if r):
+                return await interaction.response.send_message("Only staff can close this ticket.", ephemeral=True)
+
+        modal = CloseTicketReasonModal(channel)
         await interaction.response.send_modal(modal)
 
 class TicketAdminView(discord.ui.View):
@@ -259,7 +281,8 @@ class TicketAdminView(discord.ui.View):
             "category_id": None,
             "staff_roles": [],
             "description": "New ticket type",
-            "require_reason": False
+            "require_reason": False,
+            "close_permission": "staff"
         }
         save_ticket_config(data)
 
@@ -390,6 +413,20 @@ class TicketConfigView(discord.ui.View):
 
         await interaction.message.edit(embed=embed, view=self)
         await interaction.followup.send("Description updated!", ephemeral=True)
+
+    @discord.ui.button(label="Toggle Close Permission", style=discord.ButtonStyle.gray, custom_id="toggle_close_permission")
+    async def toggle_close_permission(self, interaction: discord.Interaction, button: discord.ui.Button):
+        data = load_ticket_config()
+        current = data[self.ticket_type].get("close_permission", "staff")
+
+        new_value = "anyone" if current == "staff" else "staff"
+        data[self.ticket_type]["close_permission"] = new_value
+        save_ticket_config(data)
+
+        await interaction.response.send_message(
+            f"Close permission set to **{new_value}** for `{self.ticket_type}`.",
+            ephemeral=True
+        )
 
     @discord.ui.button(label="Toggle Require Reason", style=discord.ButtonStyle.gray, custom_id="toggle_reason")
     async def toggle_reason(self, interaction: discord.Interaction, button: discord.ui.Button):
