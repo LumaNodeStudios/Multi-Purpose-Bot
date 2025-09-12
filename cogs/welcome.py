@@ -10,9 +10,10 @@ class Welcome(commands.Cog):
     async def on_member_join(self, member: discord.Member):
         """Event triggered when a new member joins the server."""
 
-        channel = member.guild.system_channel
+        channel = self.bot.get_channel(config.WELCOME_CHANNEL_ID)
+
         if channel is None:
-            channel = self.bot.get_channel(config.STAFF_LOG_CHANNEL_ID)
+            channel = member.guild.system_channel
 
         if channel is None:
             return
@@ -26,7 +27,11 @@ class Welcome(commands.Cog):
         embed.set_thumbnail(url=member.display_avatar.url)
         embed.add_field(name="Username", value=member.name, inline=True)
         embed.add_field(name="ID", value=member.id, inline=True)
-        embed.add_field(name="Joined Discord", value=member.created_at.strftime("%b %d, %Y"), inline=False)
+        embed.add_field(
+            name="Joined Discord",
+            value=member.created_at.strftime("%b %d, %Y"),
+            inline=False
+        )
         embed.set_footer(text=f"Member #{len(member.guild.members)}")
 
         await channel.send(embed=embed)
