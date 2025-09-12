@@ -71,7 +71,7 @@ class CloseTicketReasonModal(discord.ui.Modal, title="Close Ticket"):
         transcript.seek(0)
         file = discord.File(fp=transcript, filename=f"transcript-{self.channel.name}.txt")
 
-        log_channel = guild.get_channel(config.STAFF_LOG_CHANNEL_ID)
+        log_channel = guild.get_channel(config.TICKET_LOG_CHANNEL_ID)
         if log_channel:
             embed = discord.Embed(
             title="Ticket Closed",

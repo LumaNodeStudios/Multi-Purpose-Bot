@@ -41,7 +41,7 @@ class VerifyModal(Modal, title="Verification"):
         embed.add_field(name="Steam Name", value=self.steam_name.value, inline=False)
         embed.add_field(name="Backstory", value=self.backstory.value, inline=False)
 
-        staff_channel = interaction.client.get_channel(config.STAFF_LOG_CHANNEL_ID)
+        staff_channel = interaction.client.get_channel(config.VERIFY_LOG_CHANNEL_ID)
         view = StaffDecisionView(self.user, self.char_name.value, self.steam_name.value, self.backstory.value)
         await staff_channel.send(embed=embed, view=view)
 
