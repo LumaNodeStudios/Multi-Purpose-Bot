@@ -60,7 +60,6 @@ class GiveawayView(discord.ui.View):
             view.entries.add(interaction.user.id)
             remaining = int(view.end_time - discord.utils.utcnow().timestamp())
             await view.update_embed(remaining)
-
             await interaction.response.send_message("You have entered the giveaway!", ephemeral=True)
 
     class LeaveButton(discord.ui.Button):
@@ -82,14 +81,13 @@ class GiveawayView(discord.ui.View):
             view.entries.remove(interaction.user.id)
             remaining = int(view.end_time - discord.utils.utcnow().timestamp())
             await view.update_embed(remaining)
-
             await interaction.response.send_message("You have left the giveaway.", ephemeral=True)
 
     async def start_updating(self):
-        """Background task to keep updating the countdown and finish the giveaway."""
+        """Background task to update countdown at safe intervals and finish the giveaway."""
         while True:
             if not self.message:
-                await asyncio.sleep(1)
+                await asyncio.sleep(5)
                 continue
 
             remaining = int(self.end_time - discord.utils.utcnow().timestamp())
@@ -97,13 +95,18 @@ class GiveawayView(discord.ui.View):
                 await self.end_giveaway()
                 break
 
-            if remaining <= 60:
-                await asyncio.sleep(10)
-            else:
-                await asyncio.sleep(60)
-
             await self.update_embed(remaining)
 
+            if remaining > 86400:
+                await asyncio.sleep(900)
+            elif remaining > 3600:
+                await asyncio.sleep(300)
+            elif remaining > 600:
+                await asyncio.sleep(60)
+            elif remaining > 60:
+                await asyncio.sleep(15)
+            else:
+                await asyncio.sleep(5)
 
     async def update_embed(self, remaining: int | None = None):
         """Update the giveaway embed dynamically with countdown and entries."""
@@ -125,7 +128,10 @@ class GiveawayView(discord.ui.View):
         )
         embed.set_footer(text="The giveaway has not ended yet.")
         if self.message:
-            await self.message.edit(embed=embed, view=self)
+            try:
+                await self.message.edit(embed=embed, view=self)
+            except discord.HTTPException:
+                pass
 
     async def end_giveaway(self):
         """End the giveaway, pick winners, and update the embed."""
@@ -234,6 +240,7 @@ class Giveaways(commands.Cog):
         giveaway_message = await channel.send(embed=embed, view=view)
         view.message = giveaway_message
 
+        # Start background updater
         view.update_task = asyncio.create_task(view.start_updating())
 
         await interaction.response.send_message(
