@@ -97,8 +97,13 @@ class GiveawayView(discord.ui.View):
                 await self.end_giveaway()
                 break
 
+            if remaining <= 60:
+                await asyncio.sleep(10)
+            else:
+                await asyncio.sleep(60)
+
             await self.update_embed(remaining)
-            await asyncio.sleep(1)
+
 
     async def update_embed(self, remaining: int | None = None):
         """Update the giveaway embed dynamically with countdown and entries."""
