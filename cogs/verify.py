@@ -20,10 +20,10 @@ class VerifyModal(Modal, title="Verification"):
     )
     backstory = TextInput(
         label="Character Backstory",
-        placeholder="Write a short backstory for your character...",
+        placeholder="Max 1000 characters",
         style=discord.TextStyle.paragraph,
         required=True,
-        max_length=3000
+        max_length=1000
     )
 
     def __init__(self, user: discord.Member):
